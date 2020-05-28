@@ -30,7 +30,7 @@
             </v-col>
 
             <v-col cols="12" class="py-0">
-              <ValidationProvider name="Email" :rules="{required: true, email: true, email_uniq: [userData]}" v-slot="{ errors }">
+              <ValidationProvider name="Email" :rules="{required: true, email: true, email_uniq: userData}" v-slot="{ errors }">
                 <v-text-field outlined type="email" v-model="userData.email" :error-messages="errors" placeholder="User Email">
                   <template v-slot:label>
                     Email <b class="text--error">*</b>
