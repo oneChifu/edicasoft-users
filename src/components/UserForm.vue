@@ -143,19 +143,24 @@ export default {
 
   created() {
     this.setDefaultUserData()
+
+    // console.log(Math.max(...this.users.map(item => item.id)))
+    console.log(this.users.map(item => item.id))
   },
 
   methods: {
     setDefaultUserData() {
       let empty = {
-        id: null,
-        firstname: '',
-        lastname: '',
-        email: '',
+        // id: () => {
+        //   return Math.max( ...this.users.id );
+        // },
+        firstname: 'testfiest',
+        lastname: 'testlast',
+        email: 'test@test.test',
         address: {
-          country: '',
-          city: '',
-          street: ''
+          country: 'testcountry',
+          city: 'testcity',
+          street: 'teststreet'
         }
       }
 
@@ -171,7 +176,7 @@ export default {
 
       await this.$store.dispatch('users/addUser', this.userData)
         .then(() => {
-          this.closeDialog()
+          // this.closeDialog()
         }).catch(e => {
           console.log(e);
         }).finally(() => {

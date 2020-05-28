@@ -1,7 +1,6 @@
 {
   "users": [
     {
-      "id": 1,
       "timestamp": 1590672853,
       "firstname": "John",
       "lastname": "Dou",
@@ -13,7 +12,6 @@
       }
     },
     {
-      "id": 2,
       "timestamp": 1590672855,
       "firstname": "Jack",
       "lastname": "Black",
@@ -25,7 +23,6 @@
       }
     },
     {
-      "id": 3,
       "timestamp": 1590672860,
       "firstname": "John3",
       "lastname": "Dou",
@@ -37,7 +34,6 @@
       }
     },
     {
-      "id": 4,
       "timestamp": 1590672863,
       "firstname": "Jack4",
       "lastname": "Black",
@@ -49,7 +45,6 @@
       }
     },
     {
-      "id": 5,
       "timestamp": 1590672869,
       "firstname": "John5",
       "lastname": "Dou",

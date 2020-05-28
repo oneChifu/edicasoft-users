@@ -15,18 +15,22 @@
           prepend-icon="mdi-magnify"
           clearable
           placeholder="Search user by Name"
-          :disabled="!users.length"
+          :disabled="!users.length || loading"
         ></v-text-field>
       </v-col>
 
       <v-col cols="2" class="text-right">
-        <v-btn color="primary" @click="dialog = true, dialogType = 'add'">
+        <v-btn 
+          :disabled="loading"
+          color="primary" 
+          @click="dialog = true, dialogType = 'add'"
+        >
           <v-icon left>mdi-plus</v-icon> Add user
         </v-btn>
       </v-col>
     </v-row>
 
-    <v-container v-if="filteredUsers" class="users py-5">
+    <v-container v-if="filteredUsers && !loading" class="users py-5">
       <div>
         <v-row class="users__head d-flex align-center">
           <v-col cols="4" class="d-flex align-center">
@@ -48,8 +52,17 @@
       ></v-pagination>
     </v-container>
 
-    <div v-else class="mt-5">
+    <div v-else-if="!filteredUsers && !loading" class="mt-5">
       <div class="headline">No users</div>
+    </div>
+
+    <div v-if="loading" class="mt-10 text-center">
+      <v-progress-circular
+        :size="42"
+        :width="5"
+        color="primary"
+        indeterminate
+      ></v-progress-circular>
     </div>
 
     <UserForm @close="closeDialog" :dialog="dialog" :dialog-type="dialogType" :user="user" />
@@ -69,6 +82,7 @@ export default {
   },
 
   data: () => ({
+    loading: true,
     searchUsersValue: '',
 
     dialog: false,
@@ -76,7 +90,7 @@ export default {
     user: {},
 
     page: 1,
-    perPage: 3,
+    perPage: 4,
     pageCount: 0
   }),
 
@@ -101,6 +115,13 @@ export default {
 
       return _.chunk(result, this.perPage)[this.page - 1]
     },
+  },
+
+  beforeCreate() {
+    this.$store.dispatch('users/getUsers')
+      .finally(() => {
+        this.loading = false
+      })
   },
 
   created() {

@@ -2,74 +2,7 @@ export default {
   namespaced: true,
 
   state: {
-    data: [
-      // {
-      //   id: 1,
-      //   firstname: 'John',
-      //   lastname: 'Dou',
-      //   email: 'johndou@test.test',
-      //   address: {
-      //     country: 'USA',
-      //     city: 'New York',
-      //     street: 'Main st.'
-      //   }
-      // },
-      // {
-      //   id: 2,
-      //   firstname: 'Jack',
-      //   lastname: 'Black',
-      //   email: 'jack@test.test',
-      //   address: {
-      //     country: 'Canada',
-      //     city: 'Toronto',
-      //     street: 'Violet st.'
-      //   }
-      // },
-      // {
-      //   id: 3,
-      //   firstname: 'John3',
-      //   lastname: 'Dou',
-      //   email: 'johndou@test.test',
-      //   address: {
-      //     country: 'USA',
-      //     city: 'New York',
-      //     street: 'Main st.'
-      //   }
-      // },
-      // {
-      //   id: 4,
-      //   firstname: 'Jack4',
-      //   lastname: 'Black',
-      //   email: 'jack@test.test',
-      //   address: {
-      //     country: 'Canada',
-      //     city: 'Toronto',
-      //     street: 'Violet st.'
-      //   }
-      // },
-      // {
-      //   id: 5,
-      //   firstname: 'John5',
-      //   lastname: 'Dou',
-      //   email: 'johndou@test.test',
-      //   address: {
-      //     country: 'USA',
-      //     city: 'New York',
-      //     street: 'Main st.'
-      //   }
-      // },
-      // {
-      //   id: 6,
-      //   firstname: 'Jack6',
-      //   lastname: 'Black',
-      //   email: 'jack@test.test',
-      //   address: {
-      //     country: 'Canada',
-      //     city: 'Toronto',
-      //     street: 'Violet st.'
-      //   }
-      // },
-    ]
+    data: []
   },
 
   getters: {
@@ -79,11 +12,48 @@ export default {
   },
 
   mutations: {
+    SET_USERS(state, data) {
+      state.data = data
+    },
+
+    SET_USER(state, data) {
+      state.data.push(data)
+    }
   },
 
   actions: {
-    // async setUsers({ commit }, data) {
-    //   commit('SET_USERS', data)
-    // },
+    async getUsers({ dispatch }) {
+      try {
+        await this._vm.$axios
+          .get(`users`)
+          .then(async response => {
+            await dispatch('setUsers', response.data)
+          })
+      } catch (e) {
+        dispatch("setError", e, { root: true });
+        throw e;
+      }
+    },
+
+    async setUsers({ commit }, data) {
+      commit('SET_USERS', data)
+    },
+
+    async addUser({ dispatch, commit, rootState}, data) {
+      data.timestamp = Math.floor(Date.now() / 1000)
+
+      try {
+        await this._vm.$axios
+          .post(`users`, data)
+          .then(async response => {
+            console.log('addUser', response)
+
+            commit('SET_USER', response)
+          })
+      } catch (e) {
+        dispatch("setError", e, { root: true });
+        throw e;
+      }
+    },
   }
 };
