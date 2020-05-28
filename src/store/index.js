@@ -26,6 +26,9 @@ export default new Vuex.Store({
   },
 
   actions: {
+    setError({ commit }, error) {
+      commit("SET_ERROR", error.code || error);
+    },
   },
   
   modules: {

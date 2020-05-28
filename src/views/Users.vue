@@ -1,11 +1,11 @@
 <template>
-  <v-container>
+  <v-container class="px-4 px-md-12">
     <v-row class="d-flex align-center">
-      <v-col cols="4">
+      <v-col cols="12" sm="12" md="6" lg="4">
         <div class="display-2">Edicasoft Users</div>
       </v-col>
 
-      <v-col class="text-right">
+      <v-col cols="6" sm="6" md="4" lg="6" class="text-sm-left text-md-right">
         <v-text-field
           class="d-inline-flex ma-0 pa-0"
           style="max-width: 300px"
@@ -19,11 +19,11 @@
         ></v-text-field>
       </v-col>
 
-      <v-col cols="2" class="text-right">
+      <v-col cols="6" sm="6" md="2" class="text-right">
         <v-btn 
           :disabled="loading"
           color="primary" 
-          @click="dialog = true, dialogType = 'add'"
+          @click="openDialogUserForm()"
         >
           <v-icon left>mdi-plus</v-icon> Add user
         </v-btn>
@@ -32,16 +32,15 @@
 
     <v-container v-if="filteredUsers && !loading" class="users py-5">
       <div>
-        <v-row class="users__head d-flex align-center">
-          <v-col cols="4" class="d-flex align-center">
-            <v-checkbox class="pa-0 ma-0 mr-5" hide-details></v-checkbox>
+        <v-row class="users__head d-none d-sm-flex align-center">
+          <v-col cols="12" sm="4" class="d-flex align-center">
             <b>Name</b>
           </v-col>
-          <v-col cols="3"><b>Email</b></v-col>
-          <v-col cols="4"><b>Address</b></v-col>
+          <v-col cols="12" sm="3"><b>Email</b></v-col>
+          <v-col cols="12" sm="4"><b>Address</b></v-col>
         </v-row>
 
-        <UserBlock v-for="(user, index) in filteredUsers" :key="index" @open="openDialog" :index="index" :user="user" />
+        <UserBlock v-for="(user, index) in filteredUsers" :key="index" @edit="openDialogUserForm" @delete="openDialogUserDelete" :user="user" />
       </div>
 
       <v-pagination
@@ -65,7 +64,8 @@
       ></v-progress-circular>
     </div>
 
-    <UserForm @close="closeDialog" :dialog="dialog" :dialog-type="dialogType" :user="user" />
+    <UserDelete @close="closeDialogUserDelete" :dialog="dialogUserDelete" :user="user" />
+    <UserForm @close="closeDialogUserForm" :dialog="dialogUserForm" :user="user" />
   </v-container>
 </template>
 
@@ -74,19 +74,23 @@ import _ from 'lodash';
 import {mapGetters} from "vuex";
 import UserBlock from '@/components/UserBlock'
 import UserForm from '@/components/UserForm'
+import UserDelete from '@/components/UserDelete'
 
 export default {
   components: {
     UserBlock,
     UserForm,
+    UserDelete,
   },
 
   data: () => ({
     loading: true,
     searchUsersValue: '',
 
-    dialog: false,
-    dialogType: '',
+    dialogUserDelete: false,
+    dialogUserForm: false,
+    dialogUserFormType: '',
+
     user: {},
 
     page: 1,
@@ -101,7 +105,7 @@ export default {
 
     filteredUsers() {
       let result = this.sortUsers(this.users.filter(user => {
-        user.avatar = `${user.firstname.charAt(0)}${user.lastname.charAt(0)}`
+        user.avatar = `${user.firstname.charAt(0).toUpperCase()}${user.lastname.charAt(0).toUpperCase()}`
         user.addressFull = Object.values(user.address).join(', ')
   
         if ( this.searchUsersValue ) {
@@ -128,14 +132,26 @@ export default {
   },
 
   methods: {
-    openDialog(user) {
-      this.dialogType = 'edit'
-      this.user = user
-      this.dialog = true
+    openDialogUserDelete(user) {
+      this.user = user || {}
+      this.dialogUserDelete = true
+    },
+    
+    closeDialogUserDelete(user) {
+      this.user = {}
+      this.dialogUserDelete = false
+    },
+    
+    openDialogUserForm(user) {
+      this.user = user || {}
+      this.dialogUserForm = true
+      this.dialogUserFormType = 'edit'
     },
 
-    closeDialog() {
-      this.dialog = false
+    closeDialogUserForm() {
+      this.user = {}
+      this.dialogUserForm = false
+      this.dialogUserFormType = ''
     },
 
     sortUsers(users) {

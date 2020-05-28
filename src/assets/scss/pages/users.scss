@@ -1,7 +1,9 @@
+@import '~vuetify/src/styles/tools/_functions.sass';
 
 .users {
   &__user {
-    // transition: ;
+    position: relative;
+
     .col {
       &:nth-child(1) {
         position: relative;
@@ -9,6 +11,16 @@
         & > div:nth-child(3) {
           word-break: break-all;
           max-width: 100%;
+        }
+      }
+      
+      &:nth-child(4) {
+        @media #{map-get($display-breakpoints, 'xs-only')} {
+          position: absolute;
+          right: 10px;
+          top: 5px;
+          padding: 0;
+          text-align: left !important;
         }
       }
     }

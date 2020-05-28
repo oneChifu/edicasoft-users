@@ -1,28 +1,11 @@
 <template>
-  <v-container>
-    <div class="display-3">Error 404</div>
+  <v-container class="px-4 px-md-12">
+    <v-row class="d-flex align-center mb-4">
+      <v-col cols="12" sm="12">
+        <div class="display-2">Error 404</div>
+      </v-col>
+    </v-row>
 
-    <v-btn color="primary" @click="$router.go(-1)">Back</v-btn>
+    <v-btn color="primary" to="/">Go to Users</v-btn>
   </v-container>
 </template>
-
-<script>
-export default {
-  components: {
-  },
-
-  created() {
-    // console.log('document.referrer', window.history.href)
-    // console.log('history', this.$router)
-  },
-
-  // beforeRouteEnter(to, from, next) {
-  //   console.log('from', from)
-  //   next()
-    
-  //   // next((vm) => {
-  //   //   vm.from = from;
-  //   // });
-  // }
-}
-</script>

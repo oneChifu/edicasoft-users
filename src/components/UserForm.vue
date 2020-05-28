@@ -1,15 +1,15 @@
 <template>
-<ValidationObserver ref="userDialogForm" v-slot="{ invalid }">
+<ValidationObserver ref="dialogUserFormRef" v-slot="{ invalid }">
   <v-dialog v-model="dialog" persistent scrollable max-width="560px">
     <v-card>
       <v-card-title>
-        <div class="display-1">{{ dialogType == 'add' ? 'Add User' : 'Edit User' }}</div>
+        <div class="display-1">{{ dialogAdd ? 'Add User' : 'Edit User' }}</div>
       </v-card-title>
 
       <v-card-text>
         <v-container v-if="Object.keys(userData).length">
           <v-row>
-            <v-col cols="6" class="py-0">
+            <v-col cols="12" sm="6" class="py-0">
               <ValidationProvider name="First Name" :rules="{required: true, min: 2, max: 20}" v-slot="{ errors }">
                 <v-text-field outlined v-model="userData.firstname" :error-messages="errors" placeholder="User First Name">
                   <template v-slot:label>
@@ -19,7 +19,7 @@
               </ValidationProvider>
             </v-col>
 
-            <v-col cols="6" class="py-0">
+            <v-col cols="12" sm="6" class="py-0">
               <ValidationProvider name="Last Name" :rules="{required: true, min: 2, max: 20}" v-slot="{ errors }">
                 <v-text-field outlined v-model="userData.lastname" :error-messages="errors" placeholder="User Last Name">
                   <template v-slot:label>
@@ -39,22 +39,23 @@
               </ValidationProvider>
             </v-col>
 
-            <v-col cols="12" class="py-0">
+            <v-col cols="12" class="pt-0 py-3">
               <v-combobox
                 v-model="userData.address.country"
                 outlined
                 :items="countries"
                 label="Country"
                 placeholder="User Country" 
+                hide-details
               ></v-combobox>
             </v-col>
 
-            <v-col cols="12" class="py-0">
-              <v-text-field outlined v-model="userData.address.city" label="City" placeholder="User City"></v-text-field>
+            <v-col cols="12" class="py-5">
+              <v-text-field outlined v-model="userData.address.city" label="City" placeholder="User City" hide-details></v-text-field>
             </v-col>
 
-            <v-col cols="12" class="py-0">
-              <v-text-field outlined v-model="userData.address.street" label="Street" placeholder="User Street"></v-text-field>
+            <v-col cols="12" class="py-3">
+              <v-text-field outlined v-model="userData.address.street" label="Street" placeholder="User Street" hide-details></v-text-field>
             </v-col>
           </v-row>
         </v-container>
@@ -74,10 +75,11 @@
         <v-btn 
           color="primary" 
           :readonly="loading"
+          :disabled="!flagChanged || invalid"
           :loading="loading"
-          @click="dialogType == 'add' ? addUser() : editUser()"
+          @click="dialogAdd ? addUser() : editUser()"
         >
-          {{ dialogType == 'add' ? 'Add User' : 'Save Changes' }}
+          {{ dialogAdd ? 'Add User' : 'Save Changes' }}
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -102,10 +104,6 @@ export default {
       required: true,
       type: Boolean
     },
-    dialogType: {
-      required: true,
-      type: String
-    },
     user: {
       type: Object
     }
@@ -123,11 +121,15 @@ export default {
       system: "system/data",
       users: "users/data",
     }),
+
+    dialogAdd() {
+      return Object.keys(this.user).length ? false : true
+    }
   },
 
   watch: {
     user: {
-      handler() {
+      handler(value) {
         this.setDefaultUserData()
       },
       deep: true
@@ -143,40 +145,41 @@ export default {
 
   created() {
     this.setDefaultUserData()
-
-    // console.log(Math.max(...this.users.map(item => item.id)))
-    console.log(this.users.map(item => item.id))
   },
 
   methods: {
     setDefaultUserData() {
-      let empty = {
-        // id: () => {
-        //   return Math.max( ...this.users.id );
-        // },
-        firstname: 'testfiest',
-        lastname: 'testlast',
-        email: 'test@test.test',
-        address: {
-          country: 'testcountry',
-          city: 'testcity',
-          street: 'teststreet'
-        }
-      }
+      if ( Object.keys(this.user).length ) {
+        this.userData = JSON.parse(JSON.stringify(this.user))
 
-      if ( this.user ) {
-        this.userData = JSON.parse(JSON.stringify(Object.assign({}, empty, this.user)))
+        setTimeout(() => {
+          this.$refs.dialogUserFormRef.validate()
+        }, 100)
       } else {
-        this.userData = empty
+        this.userData = {
+          firstname: '',
+          lastname: '',
+          email: '',
+          address: {
+            country: '',
+            city: '',
+            street: ''
+          }
+        }
+
+        setTimeout(() => {
+          this.$refs.dialogUserFormRef.reset()
+        }, 100)
       }
     },
     
     async addUser() {
       this.loading = true
+      this.userData.id = Math.max(...this.users.map(item => item.id)) + 1
 
       await this.$store.dispatch('users/addUser', this.userData)
         .then(() => {
-          // this.closeDialog()
+          this.closeDialog()
         }).catch(e => {
           console.log(e);
         }).finally(() => {
@@ -199,7 +202,7 @@ export default {
 
     closeDialog() {
       this.setDefaultUserData()
-      this.$refs.userDialogForm.reset()
+      this.$refs.dialogUserFormRef.reset()
       this.$emit('close')
     },
   }
