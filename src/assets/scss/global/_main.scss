@@ -2,9 +2,18 @@
   &--wrap {
     background: linear-gradient(183.13deg, #006DD2 7.56%, #3FC9C1 100%);
   }
+
+  .v-content {
+    &__wrap {
+      > .container {
+        background: #ffffff;
+        min-height: 90vh;
+        border-radius: 12px;
+        margin-top: 5vh;
+        margin-bottom: 5vh;
+        padding: 30px 50px;
+      }
+    }
+  }
 }
 
-.container {
-  background: #ffffff;
-  min-height: 100vh;
-}

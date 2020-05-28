@@ -1,0 +1,59 @@
+{
+  "users": [
+    {
+      "timestamp": 1590672853,
+      "firstname": "John",
+      "lastname": "Dou",
+      "email": "johndou@test.test",
+      "address": {
+        "country": "USA",
+        "city": "New York",
+        "street": "Main st."
+      }
+    },
+    {
+      "timestamp": 1590672855,
+      "firstname": "Jack",
+      "lastname": "Black",
+      "email": "jack@test.test",
+      "address": {
+        "country": "Canada",
+        "city": "Toronto",
+        "street": "Violet st."
+      }
+    },
+    {
+      "timestamp": 1590672860,
+      "firstname": "John3",
+      "lastname": "Dou",
+      "email": "johndou@test.test",
+      "address": {
+        "country": "USA",
+        "city": "New York",
+        "street": "Main st."
+      }
+    },
+    {
+      "timestamp": 1590672863,
+      "firstname": "Jack4",
+      "lastname": "Black",
+      "email": "jack@test.test",
+      "address": {
+        "country": "Canada",
+        "city": "Toronto",
+        "street": "Violet st."
+      }
+    },
+    {
+      "timestamp": 1590672869,
+      "firstname": "John5",
+      "lastname": "Dou",
+      "email": "johndou@test.test",
+      "address": {
+        "country": "USA",
+        "city": "New York",
+        "street": "Main st."
+      }
+    }
+  ]
+}

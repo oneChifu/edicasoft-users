@@ -5,6 +5,8 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify';
 
+import "./midleware/veevalidate";
+
 // import store from "./store";
 // import router from "./router";
 // import i18n from "./plugins/i18n";

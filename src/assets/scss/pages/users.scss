@@ -1,0 +1,16 @@
+
+.users {
+  &__user {
+    // transition: ;
+    .col {
+      &:nth-child(1) {
+        position: relative;
+
+        & > div:nth-child(3) {
+          word-break: break-all;
+          max-width: 100%;
+        }
+      }
+    }
+  }
+}
