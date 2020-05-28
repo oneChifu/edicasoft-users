@@ -1,6 +1,8 @@
 module.exports = {
   lintOnSave: false,
 
+  publicPath: process.env.NODE_ENV === 'production' ? '/https://github.com/oneChifu/edicasoft-users/dist/' : '/',
+
   transpileDependencies: [
     "vuetify"
   ],
